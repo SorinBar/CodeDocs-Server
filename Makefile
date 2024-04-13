@@ -1,0 +1,2 @@
+local:
+	genezio local

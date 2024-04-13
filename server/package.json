@@ -7,8 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Genezio",
-  "license": "ISC",
+  "author": "",
+  "license": "",
   "dependencies": {
     "@genezio/types": "^1.0.14",
     "dotenv": "^16.4.5",
