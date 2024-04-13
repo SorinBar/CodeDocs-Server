@@ -43,13 +43,14 @@ const SYSTEM_CONTEXT_DECISION: string =
 const SYSTEM_CONTEXT_FUNCTION: string = 
 `
   Generate a documentation for a function containing:
+    - name of the function
     - params with their description
     - description of the function
     - usage containing the usage of the API
 
   Structure the response in a JSON compatible format such as:
   
-  "{\"params\":{\"param1\":\"description1\",\"param2\":\"description2\"},\"description\":\"the whole function description\",\"usage\":\"how to use the function API\"}"
+  "{\"name\":\"the name of the function\",\"params\":{\"param1\":\"description1\",\"param2\":\"description2\"},\"description\":\"the whole function description\",\"usage\":\"how to use the function API\"}"
 `;
 
 const SYSTEM_CONTEXT_COMPONENT: string = 
@@ -61,7 +62,7 @@ const SYSTEM_CONTEXT_COMPONENT: string =
 
   Structure the response in a JSON compatible format such as:
   
-  "{\"props\":{\"prop1\":\"description1\",\"prop2\":\"description2\"},\"description\":\"the whole component description\",\"usage\":\"how to use the component API\"}"
+  "{\"name\":\"the name of the component\",\"props\":{\"prop1\":\"description1\",\"prop2\":\"description2\"},\"description\":\"the whole component description\",\"usage\":\"how to use the component API\"}"
 `;
 
 
