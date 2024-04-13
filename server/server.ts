@@ -50,7 +50,7 @@ const SYSTEM_CONTEXT_FUNCTION: string =
 
   Structure the response in a JSON compatible format such as:
   
-  "{\"name\":\"the name of the function\",\"params\":{\"param1\":\"description1\",\"param2\":\"description2\"},\"description\":\"the whole function description\",\"usage\":\"how to use the function API\"}"
+  "{\"name\":\"the name of the function without async\",\"params\":{\"param1\":\"description1\",\"param2\":\"description2\"},\"description\":\"the whole function description\",\"usage\":\"how to use the function API\"}"
 `;
 
 const SYSTEM_CONTEXT_COMPONENT: string = 
