@@ -98,7 +98,7 @@ export class Server {
       return await this.functionDoc(language, data);
     } else if (response_str == CodeType.Component) {
       return await this.componentDoc(language, data);
-    } else if (response_str == CodeType.None){
+    } else {
       JSON.stringify({
         type: CodeType.None,
         status: ResponseStatus.Error,
