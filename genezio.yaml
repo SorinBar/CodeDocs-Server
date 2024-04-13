@@ -1,0 +1,15 @@
+name: hello-websockets-ts
+region: us-east-1
+yamlVersion: 2
+backend:
+  path: server
+  classes:
+    - path: ./hello.ts
+      name: HelloWorld
+  language:
+    name: ts
+    packageManager: npm
+  scripts:
+    local:
+      - npm install
+  cloudProvider: cluster
