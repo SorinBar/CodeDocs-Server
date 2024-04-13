@@ -9,10 +9,36 @@ export enum Language {
   En = "En"
 };
 
-export interface AIResponse {
-  status: String,
-  data: String
+export enum CodeType {
+  Function = "Function",
+  Component = "Component",
+  None = "None"
 };
+
+export enum ResponseStatus {
+  Success = "Success",
+  Error = "Error"
+}
+
+export enum ResponseError {
+  Parsing = "Error during JSON Parsing",
+  GPT = "Error receiving response from GPT",
+  None = "Error invalid code type in request"
+}
+
+export interface APIResponse {
+  type: CodeType,
+  status: ResponseStatus,
+  data?: String,
+  info?: ResponseError
+};
+
+const SYSTEM_CONTEXT_DECISION: string = 
+`
+  Tell me if the code is a function or a React component.
+  Structure the response will be a single or:
+  Function / Componenet / None
+`;
 
 const SYSTEM_CONTEXT_FUNCTION: string = 
 `
@@ -57,10 +83,34 @@ export class Server {
     return "Hello world!";
   }
 
-  async functionGenDoc(language: Language, data: string) {
-    let response: AIResponse = {
-      status: "success",
-      data: ""
+  async generateDoc(language: Language, data: string) {
+    let response_str: string | null | undefined;
+
+    const GPT_response = await this.openai?.chat.completions.create({
+      model: "gpt-3.5-turbo",
+      messages: [
+        {"role": "system", "content": SYSTEM_CONTEXT_DECISION},
+        {"role": "user", "content": data}
+      ]
+    });
+    response_str = GPT_response?.choices[0].message.content;
+    if (response_str == CodeType.Function) {
+      return await this.functionDoc(language, data);
+    } else if (response_str == CodeType.Component) {
+      return await this.componentDoc(language, data);
+    } else if (response_str == CodeType.None){
+      JSON.stringify({
+        type: CodeType.None,
+        status: ResponseStatus.Error,
+        info: ResponseError.None
+      } as APIResponse);
+    }
+  }
+
+  private async functionDoc(language: Language, data: string) {
+    let response: APIResponse = {
+      type: CodeType.Function,
+      status: ResponseStatus.Success,
     };
     let response_str: string | null | undefined;
     
@@ -77,21 +127,22 @@ export class Server {
       if (response_str) {
         response.data = JSON.parse(response_str);
       } else {
-        response.status = "error";
-        response.data = "";
+        response.status = ResponseStatus.Error;
+        response.info = ResponseError.GPT;
       }
     } catch (error) {
       console.log(error);
-      response.status = "error";
-      response.data = "";
+      response.status = ResponseStatus.Error;
+      response.info = ResponseError.Parsing;
     }
 
     return JSON.stringify(response);
   }
 
-  async componentGenDoc(language: Language, data: string) {
-    let response: AIResponse = {
-      status: "success",
+  private async componentDoc(language: Language, data: string) {
+    let response: APIResponse = {
+      type: CodeType.Component,
+      status: ResponseStatus.Success,
       data: ""
     };
     let response_str: string | null | undefined;
@@ -109,13 +160,13 @@ export class Server {
       if (response_str) {
         response.data = JSON.parse(response_str);
       } else {
-        response.status = "error";
-        response.data = "";
+        response.status = ResponseStatus.Error;
+        response.info = ResponseError.GPT;
       }
     } catch (error) {
       console.log(error);
-      response.status = "error";
-      response.data = "";
+      response.status = ResponseStatus.Error;
+      response.info = ResponseError.Parsing;
     }
 
     return JSON.stringify(response);
