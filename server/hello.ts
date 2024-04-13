@@ -1,6 +1,9 @@
 import { GenezioDeploy } from "@genezio/types";
-import {Server, Socket} from "socket.io"
-import http from 'http'
+import OpenAI from "openai";
+import dotenv from 'dotenv'
+dotenv.config();
+
+
 export enum Season {
   Winter = "Winter",
   Summer = "Summer"
@@ -12,30 +15,17 @@ export enum Season {
  */
 @GenezioDeploy()
 export class HelloWorld {
-  socketListener: Server;
-  constructor(server: http.Server) {
-    this.socketListener = new Server(server);
-    this.socketListener.on("connection", (socket: Socket) => {
-      console.log("A user connected");
-
-      socket.on("ping", () => {
-        console.log("Ping received!")
-        socket.emit("pong")
-      })
-
-      socket.on("disconnect", () => {
-        console.log("User disconnected");
-      });
+  private openai: OpenAI | null = null;
+  constructor(){
+    this.openai = new OpenAI({
+      apiKey: process.env.OPENAI_SECRET_KEY,
     });
-    console.log("Constructor called!")
   }
-
   /**
   * Method that returns a "Hello world" message.
   */
-  helloWorld() {
+  async helloWorld() {
     console.log("Hello world request received!")
-
     return "Hello world!";
   }
 
@@ -49,5 +39,19 @@ export class HelloWorld {
     console.log(message)
 
     return message
+  }
+
+  async askChatGPT(requestText: string) {
+    const completion = await this.openai?.chat.completions.create({
+      // the used model at the moment of writing this article
+      model: "gpt-3.5-turbo",
+      // tells ChatGPT to rephrase the requestText
+      messages: [{ role: "user", content: "rephrase this:" + requestText }],
+    });
+
+    console.log(
+      `DEBUG: request: ${requestText}, response: ${completion?.choices[0].message}`
+    );
+    return completion?.choices[0].message.content;
   }
 }
