@@ -99,7 +99,7 @@ export class Server {
     } else if (response_str == CodeType.Component) {
       return await this.componentDoc(language, data);
     } else {
-      JSON.stringify({
+      return JSON.stringify({
         type: CodeType.None,
         status: ResponseStatus.Error,
         info: ResponseError.None
