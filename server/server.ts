@@ -42,7 +42,7 @@ const SYSTEM_CONTEXT_DECISION: string =
 
 const SYSTEM_CONTEXT_FUNCTION_EN: string = 
 `
-  Generate a documentation for a function containing:
+  Generate in english a documentation for a function containing:
     - name of the function
     - params with their description
     - description of the function
@@ -55,7 +55,7 @@ const SYSTEM_CONTEXT_FUNCTION_EN: string =
 
 const SYSTEM_CONTEXT_COMPONENT_EN: string = 
 `
-  Generate a documentation for a React component containing:
+  Generate in english a documentation for a React component containing:
     - props with their description
     - description of the component
     - usage containing the usage of the component API
@@ -88,7 +88,7 @@ const SYSTEM_CONTEXT_COMPONENT_RO: string =
 
   Structureaza raspunsul intr-un JSON compatibil cu formatul:
   
-  "{\"name\":\"numele componentei\",\"params\":{\"parametrul1\":\"descrierea1\",\"parametrul2\":\"descrierea2\"},\"description\":\"descrierea intregii componente\",\"usage\":\"cum se foloseste API componentei\"}"
+  "{\"name\":\"numele componentei\",\"props\":{\"proprietatea1\":\"descrierea1\",\"proprietatea2\":\"descrierea2\"},\"description\":\"descrierea intregii componente\",\"usage\":\"cum se foloseste API componentei\"}"
 `;
 
 
